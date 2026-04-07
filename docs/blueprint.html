@@ -134,6 +134,7 @@ table.matrix tr:hover td{background:var(--table-hover)}
   <button class="tab" data-tab="dataflow">Data Flow</button>
   <button class="tab" data-tab="financial">Financial Cortex</button>
   <button class="tab" data-tab="tools">Tools &amp; MCPs</button>
+  <button class="tab" data-tab="architecture">Architecture</button>
   <button class="tab" data-tab="clone">Self-Clone</button>
   <button class="tab" data-tab="roadmap">Roadmap</button>
 </div>
@@ -877,6 +878,290 @@ table.matrix tr:hover td{background:var(--table-hover)}
 </tbody>
 </table>
 </div>
+</section>
+
+<!-- TAB: ORGANIC ARCHITECTURE -->
+<section id="panel-architecture" class="panel" role="tabpanel">
+
+<div class="card">
+<h3>Organic Architecture &mdash; A New Hybrid Pattern</h3>
+<p>No standard architecture alone fits HumanOS. <strong>Organic Architecture</strong> is a custom hybrid built around the human body metaphor, combining the best of <em>Modular Monolith</em>, <em>Event-Driven</em>, and <em>Ports &amp; Adapters</em> into a pattern designed for digital twin systems.</p>
+</div>
+
+<!-- 7 Core Principles -->
+<div class="card">
+<h3>7 Core Principles</h3>
+<div class="organ-grid">
+  <div class="organ-card">
+    <div class="organ-header"><div class="organ-dot" style="background:var(--accent)"></div><strong>1. Organ Autonomy</strong></div>
+    <p>Each organ is a self-contained Django app with its own models, tasks, APIs, health checks, and failure modes. Developers can work on separate organs with zero conflicts.</p>
+  </div>
+  <div class="organ-card">
+    <div class="organ-header"><div class="organ-dot" style="background:var(--red)"></div><strong>2. Circulatory Event Bus</strong></div>
+    <p>Organs <strong>never</strong> call each other directly. They emit events to a central bus (Redis Streams). The Heart organ IS the bus &mdash; the circulatory system carrying data everywhere.</p>
+  </div>
+  <div class="organ-card">
+    <div class="organ-header"><div class="organ-dot" style="background:var(--amber)"></div><strong>3. Nervous Reflex Arcs</strong></div>
+    <p>For time-critical paths, organs register direct synchronous calls that bypass the bus &mdash; like pulling your hand from fire without waiting for the brain to process.</p>
+  </div>
+  <div class="organ-card">
+    <div class="organ-header"><div class="organ-dot" style="background:var(--green)"></div><strong>4. DNA-Driven Bootstrap</strong></div>
+    <p>At startup, the system reads <code>identity.yaml</code> and configures every organ. Different DNA = completely different behavior, zero code changes needed.</p>
+  </div>
+  <div class="organ-card">
+    <div class="organ-header"><div class="organ-dot" style="background:var(--purple)"></div><strong>5. Ports &amp; Adapters per Organ</strong></div>
+    <p>Each organ that talks to the outside world defines abstract ports with concrete adapters for each platform. Adding Zoom support = one new file, zero core changes.</p>
+  </div>
+  <div class="organ-card">
+    <div class="organ-header"><div class="organ-dot" style="background:var(--orange)"></div><strong>6. Immune Middleware</strong></div>
+    <p>Security wraps every organ as middleware, not a separate layer. Every request, event, and file access runs through immune checks automatically.</p>
+  </div>
+  <div class="organ-card">
+    <div class="organ-header"><div class="organ-dot" style="background:var(--accent)"></div><strong>7. Evolutionary Extraction</strong></div>
+    <p>Start as a single deployable monolith. If any organ outgrows it, extract into its own service. The event bus makes this painless &mdash; the organ already communicates only via events.</p>
+  </div>
+</div>
+</div>
+
+<!-- Architecture Diagram (SVG) -->
+<div class="card">
+<h3>Architecture Diagram</h3>
+<div class="svg-wrap" style="text-align:center">
+<svg viewBox="0 0 900 700" width="100%" style="max-width:900px;font-family:'DM Sans',sans-serif">
+  <defs>
+    <marker id="arrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#34d399"/></marker>
+    <marker id="arrowB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#5b8def"/></marker>
+    <marker id="arrowP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#a78bfa"/></marker>
+  </defs>
+
+  <!-- DNA Config Layer -->
+  <rect x="280" y="10" width="340" height="80" rx="12" fill="#1e3a5f" stroke="#5b8def" stroke-width="1.5"/>
+  <text x="450" y="35" text-anchor="middle" fill="#5b8def" font-size="11" font-weight="700" letter-spacing="1">DNA CONFIG LAYER</text>
+  <rect x="300" y="45" width="120" height="30" rx="6" fill="#151820" stroke="#252a3a"/>
+  <text x="360" y="65" text-anchor="middle" fill="#e2e8f0" font-size="10">identity.yaml</text>
+  <rect x="480" y="45" width="120" height="30" rx="6" fill="#151820" stroke="#252a3a"/>
+  <text x="540" y="65" text-anchor="middle" fill="#e2e8f0" font-size="10">.env secrets</text>
+
+  <!-- Core / Skeleton -->
+  <rect x="140" y="120" width="620" height="100" rx="12" fill="#151820" stroke="#34d399" stroke-width="1.5"/>
+  <text x="450" y="142" text-anchor="middle" fill="#34d399" font-size="11" font-weight="700" letter-spacing="1">CORE / SKELETON</text>
+  <rect x="160" y="155" width="110" height="50" rx="8" fill="#064e3b" stroke="#34d399" stroke-width="1"/>
+  <text x="215" y="175" text-anchor="middle" fill="#34d399" font-size="10" font-weight="600">DNA Loader</text>
+  <text x="215" y="192" text-anchor="middle" fill="#8892a8" font-size="8">dna_loader.py</text>
+  <rect x="290" y="155" width="130" height="50" rx="8" fill="#7f1d1d" stroke="#f87171" stroke-width="1"/>
+  <text x="355" y="175" text-anchor="middle" fill="#f87171" font-size="10" font-weight="600">Heart &mdash; Event Bus</text>
+  <text x="355" y="192" text-anchor="middle" fill="#8892a8" font-size="8">bus.py (Redis Streams)</text>
+  <rect x="440" y="155" width="110" height="50" rx="8" fill="#4a1d96" stroke="#a78bfa" stroke-width="1"/>
+  <text x="495" y="175" text-anchor="middle" fill="#a78bfa" font-size="10" font-weight="600">Pulse Monitor</text>
+  <text x="495" y="192" text-anchor="middle" fill="#8892a8" font-size="8">pulse.py</text>
+  <rect x="570" y="155" width="170" height="50" rx="8" fill="#78350f" stroke="#fbbf24" stroke-width="1"/>
+  <text x="655" y="175" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="600">Immune Middleware</text>
+  <text x="655" y="192" text-anchor="middle" fill="#8892a8" font-size="8">immune.py + reflex.py</text>
+
+  <!-- Connection: DNA to Core -->
+  <line x1="360" y1="75" x2="215" y2="155" stroke="#5b8def" stroke-width="1.2" marker-end="url(#arrowB)"/>
+  <line x1="540" y1="75" x2="355" y2="155" stroke="#5b8def" stroke-width="1.2" marker-end="url(#arrowB)"/>
+
+  <!-- Organ Modules -->
+  <rect x="40" y="260" width="820" height="300" rx="12" fill="#0a0c10" stroke="#252a3a" stroke-width="1.5"/>
+  <text x="450" y="285" text-anchor="middle" fill="#5b8def" font-size="11" font-weight="700" letter-spacing="1">ORGAN MODULES &mdash; DJANGO APPS</text>
+
+  <!-- Row 1 of organs -->
+  <rect x="60"  y="300" width="130" height="50" rx="8" fill="#1e3a5f" stroke="#5b8def"/><text x="125" y="320" text-anchor="middle" fill="#5b8def" font-size="10" font-weight="600">Brain</text><text x="125" y="336" text-anchor="middle" fill="#8892a8" font-size="8">AI Engine</text>
+  <rect x="210" y="300" width="130" height="50" rx="8" fill="#064e3b" stroke="#34d399"/><text x="275" y="320" text-anchor="middle" fill="#34d399" font-size="10" font-weight="600">Lungs</text><text x="275" y="336" text-anchor="middle" fill="#8892a8" font-size="8">Data Ingestion</text>
+  <rect x="360" y="300" width="130" height="50" rx="8" fill="#78350f" stroke="#fbbf24"/><text x="425" y="320" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="600">Digestive</text><text x="425" y="336" text-anchor="middle" fill="#8892a8" font-size="8">Processing</text>
+  <rect x="510" y="300" width="130" height="50" rx="8" fill="#4a1d96" stroke="#a78bfa"/><text x="575" y="320" text-anchor="middle" fill="#a78bfa" font-size="10" font-weight="600">Memory</text><text x="575" y="336" text-anchor="middle" fill="#8892a8" font-size="8">Vector DB</text>
+  <rect x="660" y="300" width="180" height="50" rx="8" fill="#7f1d1d" stroke="#f87171"/><text x="750" y="320" text-anchor="middle" fill="#f87171" font-size="10" font-weight="600">Financial Cortex</text><text x="750" y="336" text-anchor="middle" fill="#8892a8" font-size="8">Finance Module</text>
+
+  <!-- Row 2 of organs -->
+  <rect x="60"  y="370" width="130" height="50" rx="8" fill="#1e3a5f" stroke="#5b8def"/><text x="125" y="390" text-anchor="middle" fill="#5b8def" font-size="10" font-weight="600">Hands</text><text x="125" y="406" text-anchor="middle" fill="#8892a8" font-size="8">Agent Control</text>
+  <rect x="210" y="370" width="130" height="50" rx="8" fill="#064e3b" stroke="#34d399"/><text x="275" y="390" text-anchor="middle" fill="#34d399" font-size="10" font-weight="600">Voice</text><text x="275" y="406" text-anchor="middle" fill="#8892a8" font-size="8">Communication</text>
+  <rect x="360" y="370" width="130" height="50" rx="8" fill="#78350f" stroke="#fbbf24"/><text x="425" y="390" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="600">Ears</text><text x="425" y="406" text-anchor="middle" fill="#8892a8" font-size="8">Listeners</text>
+  <rect x="510" y="370" width="130" height="50" rx="8" fill="#4a1d96" stroke="#a78bfa"/><text x="575" y="390" text-anchor="middle" fill="#a78bfa" font-size="10" font-weight="600">Eyes</text><text x="575" y="406" text-anchor="middle" fill="#8892a8" font-size="8">Dashboard</text>
+  <rect x="660" y="370" width="180" height="50" rx="8" fill="#064e3b" stroke="#34d399"/><text x="750" y="390" text-anchor="middle" fill="#34d399" font-size="10" font-weight="600">Endocrine</text><text x="750" y="406" text-anchor="middle" fill="#8892a8" font-size="8">Scheduler</text>
+
+  <!-- Row 3 of organs -->
+  <rect x="60"  y="440" width="140" height="50" rx="8" fill="#7f1d1d" stroke="#f87171"/><text x="130" y="460" text-anchor="middle" fill="#f87171" font-size="10" font-weight="600">Skeleton</text><text x="130" y="476" text-anchor="middle" fill="#8892a8" font-size="8">Framework</text>
+  <rect x="220" y="440" width="140" height="50" rx="8" fill="#4a1d96" stroke="#a78bfa"/><text x="290" y="460" text-anchor="middle" fill="#a78bfa" font-size="10" font-weight="600">Nervous System</text><text x="290" y="476" text-anchor="middle" fill="#8892a8" font-size="8">Real-time Signals</text>
+  <rect x="380" y="440" width="140" height="50" rx="8" fill="#78350f" stroke="#fbbf24"/><text x="450" y="460" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="600">Immune System</text><text x="450" y="476" text-anchor="middle" fill="#8892a8" font-size="8">Security</text>
+  <rect x="540" y="440" width="140" height="50" rx="8" fill="#1e3a5f" stroke="#5b8def"/><text x="610" y="460" text-anchor="middle" fill="#5b8def" font-size="10" font-weight="600">Circulatory</text><text x="610" y="476" text-anchor="middle" fill="#8892a8" font-size="8">Data Transport</text>
+  <rect x="700" y="440" width="140" height="50" rx="8" fill="#064e3b" stroke="#34d399"/><text x="770" y="460" text-anchor="middle" fill="#34d399" font-size="10" font-weight="600">Reproductive</text><text x="770" y="476" text-anchor="middle" fill="#8892a8" font-size="8">Self-Clone</text>
+
+  <!-- Event flow arrows -->
+  <line x1="425" y1="255" x2="355" y2="300" stroke="#f87171" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="475" y1="255" x2="575" y2="300" stroke="#f87171" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="350" y1="220" x2="125" y2="300" stroke="#34d399" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="355" y1="220" x2="275" y2="300" stroke="#34d399" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="355" y1="220" x2="425" y2="300" stroke="#34d399" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="355" y1="220" x2="750" y2="300" stroke="#34d399" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- Pulse monitor arrows -->
+  <line x1="495" y1="220" x2="125" y2="300" stroke="#a78bfa" stroke-width="0.8" stroke-dasharray="2,4"/>
+  <line x1="495" y1="220" x2="275" y2="300" stroke="#a78bfa" stroke-width="0.8" stroke-dasharray="2,4"/>
+
+  <!-- Legend -->
+  <rect x="60" y="520" width="780" height="35" rx="8" fill="#151820" stroke="#252a3a"/>
+  <circle cx="100" cy="537" r="5" fill="#34d399"/><text x="115" y="541" fill="#8892a8" font-size="9">Event Bus Flow</text>
+  <circle cx="260" cy="537" r="5" fill="#a78bfa"/><text x="275" y="541" fill="#8892a8" font-size="9">Pulse Health Check</text>
+  <circle cx="440" cy="537" r="5" fill="#f87171"/><text x="455" y="541" fill="#8892a8" font-size="9">DNA Injection</text>
+  <circle cx="600" cy="537" r="5" fill="#fbbf24"/><text x="615" y="541" fill="#8892a8" font-size="9">Immune Wrapper</text>
+</svg>
+</div>
+</div>
+
+<!-- Cell Structure -->
+<div class="card">
+<h3>Standardized Cell Structure</h3>
+<p>Every organ follows the exact same internal layout. This is the &ldquo;cell structure&rdquo; &mdash; the building block of HumanOS:</p>
+<div style="background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:16px;margin-top:12px;font-family:'Space Mono',monospace;font-size:12px;color:var(--text-dim);line-height:1.7;overflow-x:auto">
+<pre style="margin:0">organs/brain/                    <span style="color:var(--text-muted)"># Example: Brain organ</span>
+├── __init__.py
+├── apps.py                      <span style="color:var(--text-muted)"># Django app config + DNA injection</span>
+├── models.py                    <span style="color:var(--text-muted)"># Django ORM models</span>
+├── ports.py                     <span style="color:var(--text-muted)"># Abstract interfaces (LLMPort, DecisionPort)</span>
+├── adapters/                    <span style="color:var(--text-muted)"># Concrete implementations</span>
+│   ├── __init__.py
+│   ├── claude_adapter.py        <span style="color:var(--text-muted)"># Claude API adapter</span>
+│   ├── openai_adapter.py        <span style="color:var(--text-muted)"># GPT adapter (fallback)</span>
+│   └── local_adapter.py         <span style="color:var(--text-muted)"># Paperclip local adapter</span>
+├── events.py                    <span style="color:var(--text-muted)"># Events this organ publishes and subscribes to</span>
+├── tasks.py                     <span style="color:var(--text-muted)"># Celery async tasks</span>
+├── services.py                  <span style="color:var(--text-muted)"># Service layer orchestrating business logic</span>
+├── api.py                       <span style="color:var(--text-muted)"># REST endpoints (Django Ninja)</span>
+├── health.py                    <span style="color:var(--text-muted)"># Health check endpoint</span>
+├── dna.py                       <span style="color:var(--text-muted)"># Reads organ-specific config from identity.yaml</span>
+└── tests/
+    ├── test_models.py
+    ├── test_adapters.py
+    └── test_events.py</pre>
+</div>
+</div>
+
+<!-- Event Contract -->
+<div class="card">
+<h3>Event Contract Example</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+  <div style="background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:14px;font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);line-height:1.7">
+    <div style="color:var(--accent);font-weight:700;margin-bottom:8px;font-size:10px;letter-spacing:1px">LUNGS &mdash; events.py</div>
+<pre style="margin:0"><span style="color:var(--green)">PUBLISHES</span> = [
+    "artifacts.ingested",
+    "ingestion.failed",
+]
+<span style="color:var(--amber)">SUBSCRIBES</span> = [
+    "meeting.detected",
+    "meeting.retry",
+]</pre>
+  </div>
+  <div style="background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:14px;font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);line-height:1.7">
+    <div style="color:var(--accent);font-weight:700;margin-bottom:8px;font-size:10px;letter-spacing:1px">BRAIN &mdash; events.py</div>
+<pre style="margin:0"><span style="color:var(--green)">PUBLISHES</span> = [
+    "decision.made",
+    "decision.failed",
+    "analysis.complete",
+]
+<span style="color:var(--amber)">SUBSCRIBES</span> = [
+    "knowledge.extracted",
+    "task.requested",
+    "meeting.summarized",
+]</pre>
+  </div>
+</div>
+</div>
+
+<!-- Port/Adapter Example -->
+<div class="card">
+<h3>Port / Adapter Pattern</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+  <div style="background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:14px;font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);line-height:1.7">
+    <div style="color:var(--purple);font-weight:700;margin-bottom:8px;font-size:10px;letter-spacing:1px">PORT (Abstract)</div>
+<pre style="margin:0"><span style="color:var(--amber)">class</span> <span style="color:var(--green)">MeetingIngestionPort</span>(ABC):
+    @abstractmethod
+    <span style="color:var(--amber)">def</span> authenticate(self, config) -> Token
+    @abstractmethod
+    <span style="color:var(--amber)">def</span> discover_artifacts(self, id, tok)
+    @abstractmethod
+    <span style="color:var(--amber)">def</span> download(self, ref, tok) -> bytes</pre>
+  </div>
+  <div style="background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:14px;font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);line-height:1.7">
+    <div style="color:var(--green);font-weight:700;margin-bottom:8px;font-size:10px;letter-spacing:1px">ADAPTER (Concrete)</div>
+<pre style="margin:0"><span style="color:var(--amber)">class</span> <span style="color:var(--green)">TeamsAdapter</span>(MeetingIngestionPort):
+    <span style="color:var(--amber)">def</span> authenticate(self, config):
+        <span style="color:var(--accent)">return</span> graph_client.acquire_token(
+            config.tenant_id, ...
+        )
+    <span style="color:var(--text-muted)"># ... concrete Teams implementation</span></pre>
+  </div>
+</div>
+</div>
+
+<!-- Event Flow Diagram -->
+<div class="card">
+<h3>Event Flow Through the Body</h3>
+<div class="svg-wrap" style="text-align:center">
+<svg viewBox="0 0 840 200" width="100%" style="max-width:840px;font-family:'DM Sans',sans-serif">
+  <defs>
+    <marker id="af" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#34d399"/></marker>
+  </defs>
+  <!-- Organs as circles -->
+  <circle cx="60"  cy="100" r="40" fill="#1e3a5f" stroke="#5b8def" stroke-width="1.5"/><text x="60"  y="96" text-anchor="middle" fill="#5b8def" font-size="10" font-weight="600">Ears</text><text x="60"  y="112" text-anchor="middle" fill="#8892a8" font-size="8">detect</text>
+  <circle cx="200" cy="100" r="40" fill="#064e3b" stroke="#34d399" stroke-width="1.5"/><text x="200" y="96" text-anchor="middle" fill="#34d399" font-size="10" font-weight="600">Lungs</text><text x="200" y="112" text-anchor="middle" fill="#8892a8" font-size="8">ingest</text>
+  <circle cx="340" cy="100" r="40" fill="#78350f" stroke="#fbbf24" stroke-width="1.5"/><text x="340" y="96" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="600">Digestive</text><text x="340" y="112" text-anchor="middle" fill="#8892a8" font-size="8">process</text>
+  <circle cx="480" cy="100" r="40" fill="#4a1d96" stroke="#a78bfa" stroke-width="1.5"/><text x="480" y="96" text-anchor="middle" fill="#a78bfa" font-size="10" font-weight="600">Brain</text><text x="480" y="112" text-anchor="middle" fill="#8892a8" font-size="8">decide</text>
+  <circle cx="620" cy="100" r="40" fill="#1e3a5f" stroke="#5b8def" stroke-width="1.5"/><text x="620" y="96" text-anchor="middle" fill="#5b8def" font-size="10" font-weight="600">Hands</text><text x="620" y="112" text-anchor="middle" fill="#8892a8" font-size="8">execute</text>
+  <circle cx="760" cy="100" r="40" fill="#064e3b" stroke="#34d399" stroke-width="1.5"/><text x="760" y="96" text-anchor="middle" fill="#34d399" font-size="10" font-weight="600">Voice</text><text x="760" y="112" text-anchor="middle" fill="#8892a8" font-size="8">notify</text>
+
+  <!-- Flow arrows -->
+  <line x1="100" y1="100" x2="155" y2="100" stroke="#34d399" stroke-width="1.5" marker-end="url(#af)"/>
+  <text x="128" y="88" text-anchor="middle" fill="#34d399" font-size="7">meeting<tspan dy="8" x="128">.detected</tspan></text>
+  <line x1="240" y1="100" x2="295" y2="100" stroke="#34d399" stroke-width="1.5" marker-end="url(#af)"/>
+  <text x="268" y="88" text-anchor="middle" fill="#34d399" font-size="7">artifacts<tspan dy="8" x="268">.ingested</tspan></text>
+  <line x1="380" y1="100" x2="435" y2="100" stroke="#34d399" stroke-width="1.5" marker-end="url(#af)"/>
+  <text x="408" y="88" text-anchor="middle" fill="#34d399" font-size="7">knowledge<tspan dy="8" x="408">.extracted</tspan></text>
+  <line x1="520" y1="100" x2="575" y2="100" stroke="#34d399" stroke-width="1.5" marker-end="url(#af)"/>
+  <text x="548" y="88" text-anchor="middle" fill="#34d399" font-size="7">decision<tspan dy="8" x="548">.made</tspan></text>
+  <line x1="660" y1="100" x2="715" y2="100" stroke="#34d399" stroke-width="1.5" marker-end="url(#af)"/>
+  <text x="688" y="88" text-anchor="middle" fill="#34d399" font-size="7">task<tspan dy="8" x="688">.completed</tspan></text>
+
+  <!-- Heart bus label -->
+  <rect x="280" y="165" width="280" height="28" rx="6" fill="#7f1d1d" stroke="#f87171" stroke-width="1"/>
+  <text x="420" y="184" text-anchor="middle" fill="#f87171" font-size="10" font-weight="700">Heart (Event Bus) &mdash; All events flow through here</text>
+  <line x1="420" y1="165" x2="420" y2="145" stroke="#f87171" stroke-width="1" stroke-dasharray="3,3"/>
+</svg>
+</div>
+</div>
+
+<!-- Why This Beats Standard -->
+<div class="card">
+<h3>Why Organic Architecture Beats Standard Patterns</h3>
+<table class="matrix">
+<thead><tr><th>Feature</th><th>Microservices</th><th>Monolith</th><th>Modular Monolith</th><th style="background:var(--tag-green-bg)">Organic</th></tr></thead>
+<tbody>
+<tr><td>Operational overhead</td><td class="tag-red">16 services, K8s, service mesh</td><td><span class="tag tag-green">Minimal</span></td><td><span class="tag tag-green">Minimal</span></td><td><span class="tag tag-green">Minimal</span> single deploy</td></tr>
+<tr><td>Organ independence</td><td><span class="tag tag-green">Full</span></td><td><span class="tag tag-red">None</span></td><td><span class="tag tag-amber">Partial</span></td><td><span class="tag tag-green">Full</span> via event bus</td></tr>
+<tr><td>Platform adapters</td><td>Custom per service</td><td>Scattered</td><td>Possible</td><td><span class="tag tag-green">Built-in</span> ports/adapters</td></tr>
+<tr><td>Extract to microservice</td><td>Already there</td><td>Rewrite</td><td>Hard</td><td><span class="tag tag-green">Painless</span> &mdash; organ already isolated</td></tr>
+<tr><td>Identity-driven behavior</td><td>Env vars per service</td><td>Env vars</td><td>Env vars</td><td><span class="tag tag-green">DNA injection</span> from YAML</td></tr>
+<tr><td>Security model</td><td>Per-service</td><td>Global</td><td>Global</td><td><span class="tag tag-green">Immune middleware</span> per-organ</td></tr>
+<tr><td>2-person team friendly</td><td><span class="tag tag-red">No</span></td><td><span class="tag tag-amber">Sort of</span></td><td><span class="tag tag-green">Yes</span></td><td><span class="tag tag-green">Ideal</span> &mdash; organ per developer</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- Core Infrastructure -->
+<div class="card">
+<h3>Core Infrastructure Files</h3>
+<table class="matrix">
+<thead><tr><th>File</th><th>Role</th><th>Metaphor</th></tr></thead>
+<tbody>
+<tr><td><code>core/dna_loader.py</code></td><td>Parses identity.yaml, builds typed config, injects into organs</td><td>DNA &rarr; Gene expression</td></tr>
+<tr><td><code>core/bus.py</code></td><td>Event bus with InMemory (dev) and Redis Streams (prod) backends</td><td>Heart / Circulatory system</td></tr>
+<tr><td><code>core/pulse.py</code></td><td>Health monitoring &mdash; checks every organ, reports system-wide status</td><td>Pulse / Vital signs</td></tr>
+<tr><td><code>core/immune.py</code></td><td>Security middleware &mdash; rate limiting, audit, data sanitization, signing</td><td>Immune system defenses</td></tr>
+<tr><td><code>core/reflex.py</code></td><td>Synchronous fast-path for urgent operations that bypass the bus</td><td>Nervous reflex arcs</td></tr>
+</tbody>
+</table>
+</div>
+
 </section>
 
 <!-- TAB 6: SELF-CLONE GUIDE -->
