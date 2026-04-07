@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}HumanOS — Memory{% endblock %}
+{% block page_title %}Memory{% endblock %}
+{% block page_subtitle %}Search and browse your knowledge base{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto space-y-6">
+  <!-- Search -->
+  <div class="bg-gray-900 rounded-xl border border-gray-800 p-5">
+    <form hx-post="/ui/api/memory/search/" hx-target="#search-results" hx-swap="innerHTML"
+          hx-indicator="#search-spinner" class="flex gap-3">
+      {% csrf_token %}
+      <input type="text" name="query" placeholder="Search your memory... (meetings, decisions, knowledge)" autocomplete="off"
+             class="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-neural-500 focus:ring-1 focus:ring-neural-500 transition placeholder-gray-600">
+      <button type="submit" class="px-5 py-3 bg-neural-600 hover:bg-neural-500 text-white rounded-xl text-sm font-medium transition flex items-center gap-2">
+        <svg id="search-spinner" class="htmx-indicator w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+        Search
+      </button>
+    </form>
+  </div>
+
+  <!-- Results -->
+  <div id="search-results" class="space-y-3">
+    <div class="text-center py-12 text-gray-600">
+      <svg class="w-12 h-12 mx-auto mb-3 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+      <p class="text-sm">Your memory is empty. Process meetings, make decisions, and it will fill up.</p>
+    </div>
+  </div>
+
+  <!-- Memory Stats -->
+  <div class="bg-gray-900 rounded-xl border border-gray-800 p-4">
+    <h3 class="text-sm font-semibold text-gray-400 mb-3">Memory Stats</h3>
+    <div id="memory-stats" hx-get="/ui/api/memory/stats/" hx-trigger="load" hx-swap="innerHTML">
+      <div class="grid grid-cols-3 gap-4 text-center text-xs text-gray-600">
+        <div><div class="text-lg font-bold text-gray-400">0</div>Documents</div>
+        <div><div class="text-lg font-bold text-gray-400">0</div>Decisions</div>
+        <div><div class="text-lg font-bold text-gray-400">0</div>Meetings</div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}HumanOS — Brain{% endblock %}
+{% block page_title %}Brain{% endblock %}
+{% block page_subtitle %}Talk to your digital twin{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[calc(100vh-140px)]">
+
+  <!-- Chat Area -->
+  <div class="lg:col-span-3 flex flex-col bg-gray-900 rounded-xl border border-gray-800">
+    <!-- Messages -->
+    <div id="chat-messages" class="flex-1 overflow-y-auto p-6 space-y-4">
+      <div class="chat-msg flex gap-3">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-bio-500 to-neural-500 flex-shrink-0 flex items-center justify-center text-xs font-bold">H</div>
+        <div class="bg-gray-800 rounded-xl rounded-tl-none px-4 py-3 max-w-2xl">
+          <p class="text-sm text-gray-300">Hello! I'm your HumanOS Brain. I can help you think through problems, make decisions, summarize information, or just chat. What's on your mind?</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <form hx-post="/ui/api/brain/chat/" hx-target="#chat-messages" hx-swap="beforeend"
+          hx-on::after-request="this.reset(); document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight"
+          class="border-t border-gray-800 p-4 flex gap-3">
+      <input type="text" name="message" placeholder="Type a message..." autocomplete="off"
+             class="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-neural-500 focus:ring-1 focus:ring-neural-500 transition placeholder-gray-600">
+      <button type="submit" class="px-5 py-3 bg-neural-600 hover:bg-neural-500 text-white rounded-xl text-sm font-medium transition flex items-center gap-2">
+        <span class="htmx-indicator">
+          <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+        </span>
+        Send
+      </button>
+    </form>
+  </div>
+
+  <!-- Side Panel -->
+  <div class="lg:col-span-1 space-y-4">
+    <!-- Brain Status -->
+    <div class="bg-gray-900 rounded-xl border border-gray-800 p-4">
+      <h3 class="text-sm font-semibold text-gray-400 mb-3">Brain Status</h3>
+      <div id="brain-health" hx-get="/ui/api/organ-health/brain/" hx-trigger="load, every 30s" hx-swap="innerHTML">
+        <div class="animate-pulse h-16"></div>
+      </div>
+    </div>
+
+    <!-- Recent Decisions -->
+    <div class="bg-gray-900 rounded-xl border border-gray-800 p-4">
+      <h3 class="text-sm font-semibold text-gray-400 mb-3">Capabilities</h3>
+      <div class="space-y-2 text-xs text-gray-500">
+        <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-neural-500"></span> Analyze context</div>
+        <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-neural-500"></span> Make decisions</div>
+        <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-neural-500"></span> Summarize text</div>
+        <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-neural-500"></span> Generate ideas</div>
+        <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-bio-500"></span> Financial advice</div>
+        <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-bio-500"></span> Meeting prep</div>
+      </div>
+    </div>
+
+    <!-- Model Info -->
+    <div class="bg-gray-900 rounded-xl border border-gray-800 p-4">
+      <h3 class="text-sm font-semibold text-gray-400 mb-3">Model</h3>
+      <div class="text-xs text-gray-500 space-y-1">
+        <div>Primary: <span class="text-gray-300">{{ model_name|default:"Not configured" }}</span></div>
+        <div>Fallback: <span class="text-gray-300">{{ fallback_model|default:"None" }}</span></div>
+        <div class="mt-2 text-gray-600">Configure in dna/.env</div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

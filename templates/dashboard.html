@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}HumanOS — Dashboard{% endblock %}
+{% block page_title %}System Dashboard{% endblock %}
+{% block page_subtitle %}All organs at a glance{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+  <!-- Left: Stats Cards -->
+  <div class="lg:col-span-1 space-y-4">
+    <div id="stats-cards" hx-get="/ui/api/stats-cards/" hx-trigger="load, every 30s" hx-swap="innerHTML">
+      <div class="grid grid-cols-2 gap-3">
+        <div class="bg-gray-900 rounded-xl p-4 border border-gray-800 animate-pulse"><div class="h-16"></div></div>
+        <div class="bg-gray-900 rounded-xl p-4 border border-gray-800 animate-pulse"><div class="h-16"></div></div>
+        <div class="bg-gray-900 rounded-xl p-4 border border-gray-800 animate-pulse"><div class="h-16"></div></div>
+        <div class="bg-gray-900 rounded-xl p-4 border border-gray-800 animate-pulse"><div class="h-16"></div></div>
+      </div>
+    </div>
+
+    <!-- Event Log -->
+    <div class="bg-gray-900 rounded-xl border border-gray-800 p-4">
+      <h3 class="text-sm font-semibold text-gray-400 mb-3">Recent Events</h3>
+      <div id="event-log" class="space-y-2 max-h-64 overflow-y-auto text-xs">
+        <div class="flex gap-2 text-gray-500">
+          <span class="text-gray-600">startup</span>
+          <span>All 16 organs loaded, event bus initialized</span>
+        </div>
+        <div class="flex gap-2 text-gray-500">
+          <span class="text-bio-500">pulse</span>
+          <span>Health checks registered for all organs</span>
+        </div>
+        <div class="flex gap-2 text-gray-500">
+          <span class="text-neural-500">bus</span>
+          <span>InMemoryBus active, {{ event_count|default:"40+" }} subscriptions</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Center: Body Visualization -->
+  <div class="lg:col-span-1">
+    <div class="bg-gray-900 rounded-xl border border-gray-800 p-6">
+      <h3 class="text-sm font-semibold text-gray-400 mb-4 text-center">Organ Map</h3>
+      <div id="body-map" hx-get="/ui/api/body-map/" hx-trigger="load, every 30s" hx-swap="innerHTML"
+           class="relative mx-auto" style="width: 240px; height: 420px;">
+        <!-- Loaded via HTMX -->
+        <div class="flex items-center justify-center h-full text-gray-600 text-sm">Loading body map...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Organ Details -->
+  <div class="lg:col-span-1 space-y-4">
+    <div id="organ-detail" class="bg-gray-900 rounded-xl border border-gray-800 p-4">
+      <h3 class="text-sm font-semibold text-gray-400 mb-3">Organ Details</h3>
+      <p class="text-xs text-gray-600">Click an organ on the body map to inspect it.</p>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="bg-gray-900 rounded-xl border border-gray-800 p-4">
+      <h3 class="text-sm font-semibold text-gray-400 mb-3">Quick Actions</h3>
+      <div class="space-y-2">
+        <a href="/ui/brain/" class="block w-full px-3 py-2 bg-neural-600/20 text-neural-400 rounded-lg text-sm text-center hover:bg-neural-600/30 transition">Ask Brain</a>
+        <button hx-post="/ui/api/health-refresh/" hx-target="#body-map" hx-swap="innerHTML"
+                class="block w-full px-3 py-2 bg-bio-600/20 text-bio-400 rounded-lg text-sm text-center hover:bg-bio-600/30 transition cursor-pointer">
+          Refresh Health
+        </button>
+        <a href="/ui/financial/" class="block w-full px-3 py-2 bg-amber-600/20 text-amber-400 rounded-lg text-sm text-center hover:bg-amber-600/30 transition">View Finances</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Full Organ Grid -->
+<div class="mt-6">
+  <h3 class="text-sm font-semibold text-gray-400 mb-3">All Organs</h3>
+  <div id="organ-grid" hx-get="/ui/api/organ-grid/" hx-trigger="load, every 30s" hx-swap="innerHTML"
+       class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+    {% for i in "0123456789abcdef" %}
+    <div class="bg-gray-900 rounded-lg p-3 border border-gray-800 animate-pulse"><div class="h-12"></div></div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -6,8 +6,9 @@ using Django Ninja.
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.http import JsonResponse
+from django.shortcuts import redirect
 
 try:
     from ninja import NinjaAPI
@@ -71,19 +72,13 @@ def _system_health(request):
 
 
 def _index(request):
-    """Root endpoint."""
-    return JsonResponse({
-        "name": "HumanOS",
-        "version": "0.1.0",
-        "status": "alive",
-        "docs": "/api/docs",
-        "health": "/health/",
-        "admin": "/admin/",
-    })
+    """Root — redirect to the UI dashboard."""
+    return redirect("/ui/")
 
 
 urlpatterns = [
     path("", _index),
+    path("ui/", include("ui.urls")),
     path("health/", _system_health),
     path("admin/", admin.site.urls),
 ] + api_urls

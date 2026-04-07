@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}HumanOS — Financial Cortex{% endblock %}
+{% block page_title %}Financial Cortex{% endblock %}
+{% block page_subtitle %}Income, expenses, and obligations{% endblock %}
+
+{% block content %}
+<!-- Summary Cards -->
+<div id="fin-summary" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"
+     hx-get="/ui/api/financial/summary/" hx-trigger="load" hx-swap="innerHTML">
+  <div class="bg-gray-900 rounded-xl p-5 border border-gray-800">
+    <div class="text-xs text-gray-500 mb-1">Monthly Income</div>
+    <div class="text-2xl font-bold text-bio-400">--</div>
+  </div>
+  <div class="bg-gray-900 rounded-xl p-5 border border-gray-800">
+    <div class="text-xs text-gray-500 mb-1">Monthly Expenses</div>
+    <div class="text-2xl font-bold text-amber-400">--</div>
+  </div>
+  <div class="bg-gray-900 rounded-xl p-5 border border-gray-800">
+    <div class="text-xs text-gray-500 mb-1">Outstanding Loans</div>
+    <div class="text-2xl font-bold text-red-400">--</div>
+  </div>
+  <div class="bg-gray-900 rounded-xl p-5 border border-gray-800">
+    <div class="text-xs text-gray-500 mb-1">Net Savings</div>
+    <div class="text-2xl font-bold text-neural-400">--</div>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <!-- Add Transaction -->
+  <div class="bg-gray-900 rounded-xl border border-gray-800 p-5">
+    <h3 class="text-sm font-semibold text-gray-400 mb-4">Record Transaction</h3>
+    <form hx-post="/ui/api/financial/transaction/" hx-target="#transactions-list" hx-swap="afterbegin"
+          hx-on::after-request="this.reset()" class="space-y-3">
+      {% csrf_token %}
+      <div class="grid grid-cols-2 gap-3">
+        <select name="type" class="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-neural-500">
+          <option value="income">Income</option>
+          <option value="expense">Expense</option>
+          <option value="loan_payment">Loan Payment</option>
+        </select>
+        <input type="number" name="amount" placeholder="Amount" step="0.01" required
+               class="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-neural-500">
+      </div>
+      <input type="text" name="description" placeholder="Description (e.g. Salary, Rent, Groceries)" required
+             class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-neural-500">
+      <input type="text" name="category" placeholder="Category (e.g. salary, rent, food, loan)"
+             class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-neural-500">
+      <button type="submit" class="w-full px-4 py-2 bg-bio-600 hover:bg-bio-500 text-white rounded-lg text-sm font-medium transition">
+        Record
+      </button>
+    </form>
+  </div>
+
+  <!-- Recurring Bills -->
+  <div class="bg-gray-900 rounded-xl border border-gray-800 p-5">
+    <h3 class="text-sm font-semibold text-gray-400 mb-4">Recurring Obligations</h3>
+    <div id="recurring-list" hx-get="/ui/api/financial/recurring/" hx-trigger="load" hx-swap="innerHTML"
+         class="space-y-2">
+      <div class="text-xs text-gray-600">Loading...</div>
+    </div>
+    <form hx-post="/ui/api/financial/recurring/" hx-target="#recurring-list" hx-swap="innerHTML"
+          hx-on::after-request="this.reset()" class="mt-4 space-y-3 border-t border-gray-800 pt-4">
+      {% csrf_token %}
+      <div class="grid grid-cols-2 gap-3">
+        <input type="text" name="name" placeholder="Name (e.g. Rent)" required
+               class="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-neural-500">
+        <input type="number" name="amount" placeholder="Amount" step="0.01" required
+               class="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-neural-500">
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <select name="frequency" class="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-neural-500">
+          <option value="monthly">Monthly</option>
+          <option value="weekly">Weekly</option>
+          <option value="yearly">Yearly</option>
+        </select>
+        <input type="number" name="due_day" placeholder="Due day (1-31)" min="1" max="31"
+               class="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-neural-500">
+      </div>
+      <button type="submit" class="w-full px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-sm font-medium transition">
+        Add Recurring
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Transaction History -->
+<div class="mt-6 bg-gray-900 rounded-xl border border-gray-800 p-5">
+  <h3 class="text-sm font-semibold text-gray-400 mb-4">Recent Transactions</h3>
+  <div id="transactions-list" hx-get="/ui/api/financial/transactions/" hx-trigger="load" hx-swap="innerHTML"
+       class="space-y-2">
+    <div class="text-xs text-gray-600">Loading...</div>
+  </div>
+</div>
+{% endblock %}
