@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { isLLMConfigured } from "../services/llm.js";
+import { isLLMConfigured, getConnectionStatus } from "../services/llm.js";
 import { getDB } from "../db/index.js";
 import { memories, conversations, transactions, loans, meetings, habits } from "../db/schema.js";
 import fs from "fs";
@@ -72,11 +72,14 @@ router.get("/", async (_req, res) => {
       (f) => f.status === "healthy"
     );
 
+    const connection = getConnectionStatus();
+
     res.json({
       alive: true,
       name: dnaName,
       dnaLoaded,
       llmConfigured: isLLMConfigured(),
+      connection,
       status: allHealthy ? "healthy" : "degraded",
       timestamp: new Date().toISOString(),
       faculties,

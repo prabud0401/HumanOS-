@@ -58,7 +58,7 @@ router.post("/chat", async (req, res) => {
       res.setHeader("Cache-Control", "no-cache");
       res.setHeader("Connection", "keep-alive");
 
-      const fallback = `I'm your digital clone, but my brain isn't connected yet. Add your Claude API key to \`dna/.env\` to activate thinking.\n\n**Routed to**: ${faculty} faculty\n**Skills loaded**: ${skillMap[faculty]?.join(", ") || "none"}`;
+      const fallback = `I'm your digital clone, but my brain isn't connected yet.\n\n**Two ways to connect:**\n1. **CLI mode** — Install Claude CLI: \`npm install -g @anthropic-ai/claude-code\` then \`claude auth login\`\n2. **API mode** — Add your API key to \`dna/.env\`: \`ANTHROPIC_API_KEY=sk-ant-...\`\n\nGo to **Settings** to configure.\n\n**Routed to**: ${faculty} faculty\n**Skills loaded**: ${skillMap[faculty]?.join(", ") || "none"}`;
 
       res.write(`data: ${JSON.stringify({ text: fallback, faculty, done: false })}\n\n`);
       res.write(`data: ${JSON.stringify({ text: "", faculty, done: true })}\n\n`);

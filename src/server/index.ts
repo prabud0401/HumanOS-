@@ -12,6 +12,7 @@ dotenv.config({ path: path.join(ROOT, "dna", ".env") });
 
 import { initDB } from "./db/index.js";
 import { seedDefaultHabits, initHabits } from "./services/habit-scheduler.js";
+import { checkCliAvailable, getConnectionStatus } from "./services/llm.js";
 import brainRoutes from "./routes/brain.js";
 import memoryRoutes from "./routes/memory.js";
 import financialRoutes from "./routes/financial.js";
@@ -43,11 +44,15 @@ app.get("/{*splat}", (_req, res) => {
   res.sendFile(path.join(distClient, "index.html"));
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
+  await checkCliAvailable();
+  const conn = getConnectionStatus();
+
   console.log(`\n🧬 HumanOS is alive on http://localhost:${PORT}`);
   console.log(`   DNA loaded from: ${path.join(ROOT, "dna")}`);
   console.log(`   Mind loaded from: ${path.join(ROOT, "mind")}`);
-  console.log(`   Skills loaded from: ${path.join(ROOT, "skills")}\n`);
+  console.log(`   Skills loaded from: ${path.join(ROOT, "skills")}`);
+  console.log(`   🔌 Connection: ${conn.mode.toUpperCase()} — ${conn.details}\n`);
 });
 
 export default app;

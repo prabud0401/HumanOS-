@@ -6,6 +6,7 @@ interface HealthData {
   name: string;
   dnaLoaded: boolean;
   llmConfigured: boolean;
+  connection?: { mode: string; configured: boolean; details: string };
   status: string;
   timestamp: string;
   faculties: Record<
@@ -84,7 +85,12 @@ export default function Dashboard() {
             System {health.status}
             {!health.llmConfigured && (
               <span className="text-yellow-500 ml-2">
-                — Brain needs API key (dna/.env)
+                — Brain not connected (go to Settings)
+              </span>
+            )}
+            {health.connection && (
+              <span className="text-gray-500 ml-2">
+                · {health.connection.mode.toUpperCase()} mode
               </span>
             )}
           </p>
@@ -160,8 +166,8 @@ export default function Dashboard() {
           color={health.dnaLoaded ? "text-bio-400" : "text-red-400"}
         />
         <QuickStat
-          label="LLM Connected"
-          value={health.llmConfigured ? "Yes" : "No"}
+          label={`Brain (${health.connection?.mode?.toUpperCase() || "—"})`}
+          value={health.llmConfigured ? "Connected" : "Offline"}
           color={health.llmConfigured ? "text-bio-400" : "text-yellow-400"}
         />
         <QuickStat
