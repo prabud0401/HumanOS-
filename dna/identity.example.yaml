@@ -1,0 +1,279 @@
+# ╔═══════════════════════════════════════════════╗
+# ║  DIGITAL TWIN — DNA IDENTITY CONFIGURATION   ║
+# ║  This file IS you. Guard it. Customize it.    ║
+# ╚═══════════════════════════════════════════════╝
+#
+# TEMPLATE: Copy to identity.yaml and fill in real values.
+# Never commit identity.yaml with secrets — use .env for credentials.
+
+# ── CHROMOSOME 1: IDENTITY ──────────────────────
+# Who the digital twin represents (display + locale).
+identity:
+  # Short / preferred first name for greetings and UI
+  name: "Your Name"
+  # Legal or full display name
+  full_name: "Your Full Name"
+  # Informal name if different from name
+  nickname: "Your Nickname"
+  # IANA timezone for scheduling (e.g. America/New_York, Asia/Kolkata)
+  timezone: "Your/Timezone"
+  # BCP 47 locale for formatting dates and numbers
+  locale: "en-US"
+  # Optional path to profile photo; null if none
+  avatar: null
+
+# ── CHROMOSOME 2: PERSONALITY ────────────────────
+# Voice, decision style, work window, and when to escalate to a human.
+personality:
+  # direct | diplomatic | casual | formal
+  communication_style: "direct"
+  # fast | deliberate | analytical
+  decision_speed: "fast"
+  # conservative | moderate | aggressive
+  risk_tolerance: "moderate"
+  work_hours:
+    # HH:MM in work_hours.timezone
+    start: "09:00"
+    # HH:MM — end of typical availability
+    end: "18:00"
+    timezone: "Your/Timezone"
+  # e.g. professional-casual
+  response_tone: "professional-casual"
+  # low | medium | high — auto-delegate vs ask
+  delegation_preference: "high"
+  # 0.0–1.0; below this confidence, ask the real human
+  escalation_threshold: 0.6
+
+# ── CHROMOSOME 3: PROFESSIONAL ───────────────────
+# Role, company, skills, and project registry (paths are machine-specific).
+professional:
+  role: "Your Job Title"
+  company: "Your Company"
+  specializations:
+    - "Your specialization 1"
+    - "Your specialization 2"
+    - "Your specialization 3"
+  tech_stack:
+    frontend: ["Your", "Frontend", "Stack"]
+    backend: ["Your", "Backend", "Stack"]
+    databases: ["Your", "Databases"]
+    cloud: ["Your", "Cloud", "Services"]
+    ai: ["Your", "AI", "Providers"]
+    tools: ["Your", "DevTools"]
+  projects:
+    active:
+      - slug: "example-a"
+        name: "Example Active Project A"
+        path: "C:\\path\\to\\project-a"
+      - slug: "example-b"
+        name: "Example Active Project B"
+        path: "C:\\path\\to\\project-b"
+      - slug: "example-c"
+        name: "Example Active Project C"
+        path: "C:\\path\\to\\project-c"
+      - slug: "example-d"
+        name: "Example Active Project D"
+        path: "C:\\path\\to\\project-d"
+    paused:
+      - slug: "paused-1"
+        name: "Paused Project One"
+      - slug: "paused-2"
+        name: "Paused Project Two"
+      - slug: "paused-3"
+        name: "Paused Project Three"
+      - slug: "paused-4"
+        name: "Paused Project Four"
+      - slug: "paused-5"
+        name: "Paused Project Five"
+      - slug: "paused-6"
+        name: "Paused Project Six"
+
+# ── CHROMOSOME 4: AI ENGINE ─────────────────────
+# Models, adapter, and vector/RAG defaults.
+ai_engine:
+  primary_model: "your-primary-model-id"
+  adapter: "your_adapter_name"
+  fallback_model: "your-fallback-model-id"
+  temperature: 0.3
+  max_context_tokens: 200000
+  speech_to_text: "your-stt-model-id"
+  embedding_model: "your-embedding-model-id"
+  # chromadb | pinecone | azure-cognitive-search
+  vector_db: "chromadb"
+
+# ── CHROMOSOME 5: CONNECTIONS ────────────────────
+# OAuth and webhooks: ${VAR} resolved from environment / .env.
+connections:
+  platforms:
+    microsoft:
+      tenant_id: "${AZURE_TENANT_ID}"
+      client_id: "${AZURE_CLIENT_ID}"
+      client_secret: "${AZURE_CLIENT_SECRET}"
+      scopes:
+        - "OnlineMeetings.Read"
+        - "CallRecords.Read.All"
+        - "Chat.Read"
+        - "Calendars.Read"
+        - "Mail.Read"
+        - "Files.Read.All"
+    google:
+      client_id: "${GOOGLE_CLIENT_ID}"
+      client_secret: "${GOOGLE_CLIENT_SECRET}"
+      scopes:
+        - "calendar.readonly"
+        - "drive.readonly"
+        - "gmail.readonly"
+    zoom:
+      account_id: "${ZOOM_ACCOUNT_ID}"
+      client_id: "${ZOOM_CLIENT_ID}"
+      client_secret: "${ZOOM_CLIENT_SECRET}"
+    github:
+      token: "${GITHUB_TOKEN}"
+      org: "your-github-org"
+    slack:
+      bot_token: "${SLACK_BOT_TOKEN}"
+
+  communication:
+    # teams | slack | email
+    primary: "teams"
+    notification_channels:
+      - type: "teams"
+        webhook: "${TEAMS_WEBHOOK_URL}"
+      - type: "email"
+        smtp_host: "smtp.example.com"
+        smtp_port: 587
+        from: "${EMAIL_ADDRESS}"
+
+# ── CHROMOSOME 6: FINANCIAL DNA ─────────────────
+# Budgeting context; use 0 or "" where you prefer not to store amounts in repo.
+financial:
+  currency: "USD"
+
+  income:
+    salary:
+      amount: 0
+      frequency: "monthly"
+      pay_day: 1
+      employer: "Your Employer"
+    other_sources:
+      - name: "Freelance"
+        amount: 0
+        frequency: "variable"
+      - name: "Investments"
+        amount: 0
+        frequency: "monthly"
+
+  fixed_expenses:
+    - name: "Rent"
+      amount: 0
+      due_day: 1
+      frequency: "monthly"
+      category: "housing"
+    - name: "Internet"
+      amount: 0
+      due_day: 5
+      frequency: "monthly"
+      category: "utilities"
+    - name: "Phone"
+      amount: 0
+      due_day: 10
+      frequency: "monthly"
+      category: "utilities"
+    - name: "Subscriptions"
+      amount: 0
+      due_day: 1
+      frequency: "monthly"
+      category: "software"
+      details:
+        - name: "Cursor Pro"
+          amount: 0
+        - name: "Claude API"
+          amount: 0
+        - name: "GitHub Copilot"
+          amount: 0
+
+  loans:
+    - name: ""
+      principal: 0
+      monthly_emi: 0
+      remaining_balance: 0
+      interest_rate: 0
+      due_day: 5
+      end_date: ""
+
+  dues:
+    - name: ""
+      total_amount: 0
+      paid: 0
+      remaining: 0
+      due_date: ""
+
+  savings:
+    emergency_fund:
+      target: 0
+      current: 0
+    goals:
+      - name: ""
+        target: 0
+        current: 0
+        deadline: ""
+
+  budget:
+    monthly_limit: 0
+    categories:
+      housing: 0.3
+      utilities: 0.1
+      food: 0.15
+      transport: 0.1
+      savings: 0.2
+      entertainment: 0.05
+      miscellaneous: 0.1
+
+# ── CHROMOSOME 7: KNOWLEDGE PATHS ───────────────
+# On-disk layout for knowledge hub and derived folders.
+knowledge:
+  master_hub: "C:\\path\\to\\.knowledge"
+  project_knowledge_pattern: "{project_path}\\.knowledge"
+  meeting_folder_pattern: "meetings\\{YYYY-MM-DD}_{topic}"
+  session_folder_pattern: "sessions\\{YYYY-MM-DD}_{topic}"
+  rules_path: "rules"
+  references_path: "references"
+  decisions_path: "decisions"
+
+# ── CHROMOSOME 8: AGENTS (Paperclip) ────────────
+# Multi-agent orchestration (or swap platform name if you use another tool).
+agents:
+  platform: "paperclip"  # orchestration product identifier
+  api_url: "http://localhost:3100/api"  # REST base URL for agent API
+  ui_url: "http://localhost:3100"  # browser UI for monitoring
+  hierarchy:
+    tier_1: "CEO"  # top-level agent / role label
+    tier_2: "Shared Services"
+    tier_3: "Project Leads"
+    tier_4: "Specialists"
+  total_agents: 0  # approximate count of configured agents
+
+# ── CHROMOSOME 9: PREFERENCES ───────────────────
+# UI refresh, automation, and quiet hours for notifications.
+preferences:
+  theme: "dark"  # dark | light | system
+  dashboard_refresh: 30  # seconds between dashboard polls
+  meeting_auto_download: true  # fetch recordings/transcripts when available
+  auto_summarize: true  # generate summaries after meetings/sessions
+  auto_assign_actions: true  # propose owners for action items
+  notification_quiet_hours:
+    start: "23:00"  # HH:MM — suppress non-critical alerts after this
+    end: "08:00"  # HH:MS — resume normal notifications after this
+  language: "en"  # UI and generated-summary language code
+  date_format: "YYYY-MM-DD"  # display format for dates in tools
+
+# ── CHROMOSOME 10: SECURITY ─────────────────────
+# Policy defaults for sessions, secrets, and compliance labeling.
+security:
+  encryption_key_vault: "azure"  # azure | hashicorp | local — where keys live
+  token_rotation_days: 90  # reminder / policy for rotating API tokens
+  session_timeout_minutes: 15  # idle timeout for authenticated sessions
+  mfa_enabled: true  # whether you require MFA for human-facing apps
+  ip_allowlist: []  # optional list of allowed IPs/CIDRs; empty = no filter
+  audit_retention_days: 2555  # ~7 years of audit log retention target
+  data_classification_default: "internal"  # default label for new artifacts
