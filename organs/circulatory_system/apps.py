@@ -2,7 +2,11 @@
 Django app configuration for the Circulatory System organ.
 """
 
+import logging
+
 from django.apps import AppConfig
+
+logger = logging.getLogger(__name__)
 
 
 class CirculatorySystemConfig(AppConfig):
@@ -21,7 +25,13 @@ class CirculatorySystemConfig(AppConfig):
         _ = get_dna()
         self.circulatory_dna = circulatory_dna.get_circulatory_dna()
 
-        for event_type in events.SUBSCRIBES:
-            get_bus().subscribe(event_type, events.handle_event)
+        try:
+            for event_type in events.SUBSCRIBES:
+                get_bus().subscribe(event_type, events.handle_event)
+        except Exception:
+            logger.exception("circulatory_system: event bus subscription failed during AppConfig.ready()")
 
-        register_organ_health("circulatory_system", health.check)
+        try:
+            register_organ_health("circulatory_system", health.check)
+        except Exception:
+            logger.exception("circulatory_system: organ health registration failed during AppConfig.ready()")

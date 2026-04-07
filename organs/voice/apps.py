@@ -2,7 +2,11 @@
 Django app configuration for the Voice organ.
 """
 
+import logging
+
 from django.apps import AppConfig
+
+logger = logging.getLogger(__name__)
 
 
 class VoiceConfig(AppConfig):
@@ -21,7 +25,13 @@ class VoiceConfig(AppConfig):
         _ = get_dna()
         self.voice_dna = voice_dna.get_voice_dna()
 
-        for event_type in events.SUBSCRIBES:
-            get_bus().subscribe(event_type, events.handle_event)
+        try:
+            for event_type in events.SUBSCRIBES:
+                get_bus().subscribe(event_type, events.handle_event)
+        except Exception:
+            logger.exception("voice: event bus subscription failed during AppConfig.ready()")
 
-        register_organ_health("voice", health.check)
+        try:
+            register_organ_health("voice", health.check)
+        except Exception:
+            logger.exception("voice: organ health registration failed during AppConfig.ready()")

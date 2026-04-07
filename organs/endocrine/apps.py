@@ -2,7 +2,11 @@
 Django app configuration for the Endocrine organ.
 """
 
+import logging
+
 from django.apps import AppConfig
+
+logger = logging.getLogger(__name__)
 
 
 class EndocrineConfig(AppConfig):
@@ -21,7 +25,13 @@ class EndocrineConfig(AppConfig):
         _ = get_dna()
         self.endocrine_dna = endocrine_dna.get_endocrine_dna()
 
-        for event_type in events.SUBSCRIBES:
-            get_bus().subscribe(event_type, events.handle_event)
+        try:
+            for event_type in events.SUBSCRIBES:
+                get_bus().subscribe(event_type, events.handle_event)
+        except Exception:
+            logger.exception("endocrine: event bus subscription failed during AppConfig.ready()")
 
-        register_organ_health("endocrine", health.check)
+        try:
+            register_organ_health("endocrine", health.check)
+        except Exception:
+            logger.exception("endocrine: organ health registration failed during AppConfig.ready()")

@@ -2,7 +2,11 @@
 Django app configuration for the Memory organ.
 """
 
+import logging
+
 from django.apps import AppConfig
+
+logger = logging.getLogger(__name__)
 
 
 class MemoryConfig(AppConfig):
@@ -21,7 +25,13 @@ class MemoryConfig(AppConfig):
         _ = get_dna()
         self.memory_dna = memory_dna.get_memory_dna()
 
-        for event_type in events.SUBSCRIBES:
-            get_bus().subscribe(event_type, events.handle_event)
+        try:
+            for event_type in events.SUBSCRIBES:
+                get_bus().subscribe(event_type, events.handle_event)
+        except Exception:
+            logger.exception("memory: event bus subscription failed during AppConfig.ready()")
 
-        register_organ_health("memory", health.check)
+        try:
+            register_organ_health("memory", health.check)
+        except Exception:
+            logger.exception("memory: organ health registration failed during AppConfig.ready()")

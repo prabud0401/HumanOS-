@@ -3,7 +3,11 @@ Django app configuration for the Hands organ.
 Loads DNA, subscribes to the event bus, and registers pulse health checks.
 """
 
+import logging
+
 from django.apps import AppConfig
+
+logger = logging.getLogger(__name__)
 
 
 class HandsConfig(AppConfig):
@@ -20,7 +24,13 @@ class HandsConfig(AppConfig):
         get_dna()
         self.hands_dna = hands_dna.get_hands_dna()
 
-        for event_type in events.SUBSCRIBES:
-            get_bus().subscribe(event_type, events.handle_event)
+        try:
+            for event_type in events.SUBSCRIBES:
+                get_bus().subscribe(event_type, events.handle_event)
+        except Exception:
+            logger.exception("hands: event bus subscription failed during AppConfig.ready()")
 
-        register_organ_health("hands", health.check)
+        try:
+            register_organ_health("hands", health.check)
+        except Exception:
+            logger.exception("hands: organ health registration failed during AppConfig.ready()")

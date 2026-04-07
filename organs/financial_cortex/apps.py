@@ -2,7 +2,11 @@
 Django app configuration for the Financial Cortex organ.
 """
 
+import logging
+
 from django.apps import AppConfig
+
+logger = logging.getLogger(__name__)
 
 
 class FinancialCortexConfig(AppConfig):
@@ -21,7 +25,13 @@ class FinancialCortexConfig(AppConfig):
         _ = get_dna()
         self.financial_cortex_dna = fc_dna.get_financial_cortex_dna()
 
-        for event_type in events.SUBSCRIBES:
-            get_bus().subscribe(event_type, events.handle_event)
+        try:
+            for event_type in events.SUBSCRIBES:
+                get_bus().subscribe(event_type, events.handle_event)
+        except Exception:
+            logger.exception("financial_cortex: event bus subscription failed during AppConfig.ready()")
 
-        register_organ_health("financial_cortex", health.check)
+        try:
+            register_organ_health("financial_cortex", health.check)
+        except Exception:
+            logger.exception("financial_cortex: organ health registration failed during AppConfig.ready()")

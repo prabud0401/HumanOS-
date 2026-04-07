@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  # PostgreSQL — Main database
+  postgres:
+    image: postgres:16-alpine
+    container_name: humanos-db
+    environment:
+      POSTGRES_DB: humanos
+      POSTGRES_USER: humanos
+      POSTGRES_PASSWORD: humanos_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U humanos"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Redis — Event bus (Heart) + Cache + Celery broker
+  redis:
+    image: redis:7-alpine
+    container_name: humanos-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ChromaDB — Vector database (Memory organ)
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: humanos-chroma
+    ports:
+      - "8100:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    environment:
+      ANONYMIZED_TELEMETRY: "False"
+
+volumes:
+  postgres_data:
+  redis_data:
+  chroma_data:

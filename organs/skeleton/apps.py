@@ -2,7 +2,11 @@
 Django app configuration for the Skeleton organ.
 """
 
+import logging
+
 from django.apps import AppConfig
+
+logger = logging.getLogger(__name__)
 
 
 class SkeletonConfig(AppConfig):
@@ -19,7 +23,13 @@ class SkeletonConfig(AppConfig):
         get_dna()
         self.skeleton_dna = skeleton_dna.get_skeleton_dna()
 
-        for event_type in events.SUBSCRIBES:
-            get_bus().subscribe(event_type, events.handle_event)
+        try:
+            for event_type in events.SUBSCRIBES:
+                get_bus().subscribe(event_type, events.handle_event)
+        except Exception:
+            logger.exception("skeleton: event bus subscription failed during AppConfig.ready()")
 
-        register_organ_health("skeleton", health.check)
+        try:
+            register_organ_health("skeleton", health.check)
+        except Exception:
+            logger.exception("skeleton: organ health registration failed during AppConfig.ready()")

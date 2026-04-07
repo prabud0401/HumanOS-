@@ -2,7 +2,11 @@
 Django app configuration for the Heart organ.
 """
 
+import logging
+
 from django.apps import AppConfig
+
+logger = logging.getLogger(__name__)
 
 
 class HeartConfig(AppConfig):
@@ -21,7 +25,13 @@ class HeartConfig(AppConfig):
         _ = get_dna()
         self.heart_dna = heart_dna.get_heart_dna()
 
-        for event_type in events.SUBSCRIBES:
-            get_bus().subscribe(event_type, events.handle_event)
+        try:
+            for event_type in events.SUBSCRIBES:
+                get_bus().subscribe(event_type, events.handle_event)
+        except Exception:
+            logger.exception("heart: event bus subscription failed during AppConfig.ready()")
 
-        register_organ_health("heart", health.check)
+        try:
+            register_organ_health("heart", health.check)
+        except Exception:
+            logger.exception("heart: organ health registration failed during AppConfig.ready()")

@@ -2,7 +2,11 @@
 Django app configuration for the Nervous System organ.
 """
 
+import logging
+
 from django.apps import AppConfig
+
+logger = logging.getLogger(__name__)
 
 
 class NervousSystemConfig(AppConfig):
@@ -19,7 +23,13 @@ class NervousSystemConfig(AppConfig):
         get_dna()
         self.nervous_dna = ns_dna.get_nervous_system_dna()
 
-        for event_type in events.SUBSCRIBES:
-            get_bus().subscribe(event_type, events.handle_event)
+        try:
+            for event_type in events.SUBSCRIBES:
+                get_bus().subscribe(event_type, events.handle_event)
+        except Exception:
+            logger.exception("nervous_system: event bus subscription failed during AppConfig.ready()")
 
-        register_organ_health("nervous_system", health.check)
+        try:
+            register_organ_health("nervous_system", health.check)
+        except Exception:
+            logger.exception("nervous_system: organ health registration failed during AppConfig.ready()")

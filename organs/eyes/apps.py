@@ -2,7 +2,11 @@
 Django app configuration for the Eyes organ.
 """
 
+import logging
+
 from django.apps import AppConfig
+
+logger = logging.getLogger(__name__)
 
 
 class EyesConfig(AppConfig):
@@ -22,6 +26,12 @@ class EyesConfig(AppConfig):
         self.eyes_dna = eyes_dna.get_eyes_dna()
 
         # Bus matches literal types only; completion-style updates use one wildcard subscription.
-        get_bus().subscribe("*", events.handle_event)
+        try:
+            get_bus().subscribe("*", events.handle_event)
+        except Exception:
+            logger.exception("eyes: event bus subscription failed during AppConfig.ready()")
 
-        register_organ_health("eyes", health.check)
+        try:
+            register_organ_health("eyes", health.check)
+        except Exception:
+            logger.exception("eyes: organ health registration failed during AppConfig.ready()")

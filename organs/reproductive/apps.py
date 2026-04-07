@@ -2,7 +2,11 @@
 Django app configuration for the Reproductive organ.
 """
 
+import logging
+
 from django.apps import AppConfig
+
+logger = logging.getLogger(__name__)
 
 
 class ReproductiveConfig(AppConfig):
@@ -21,7 +25,13 @@ class ReproductiveConfig(AppConfig):
         _ = get_dna()
         self.reproductive_dna = reproductive_dna.get_reproductive_dna()
 
-        for event_type in events.SUBSCRIBES:
-            get_bus().subscribe(event_type, events.handle_event)
+        try:
+            for event_type in events.SUBSCRIBES:
+                get_bus().subscribe(event_type, events.handle_event)
+        except Exception:
+            logger.exception("reproductive: event bus subscription failed during AppConfig.ready()")
 
-        register_organ_health("reproductive", health.check)
+        try:
+            register_organ_health("reproductive", health.check)
+        except Exception:
+            logger.exception("reproductive: organ health registration failed during AppConfig.ready()")

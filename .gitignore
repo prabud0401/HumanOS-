@@ -42,5 +42,15 @@ desktop.ini
 *.sqlite3
 *.db
 
+# Django
+staticfiles/
+media/
+db.sqlite3
+
+# Testing
+.pytest_cache/
+htmlcov/
+.coverage
+
 # Vector DB local storage
 chroma_data/
